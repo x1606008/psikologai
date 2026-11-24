@@ -1,0 +1,17 @@
+{
+  "name": "psychology-atlas",
+  "version": "2.0.0",
+  "description": "PSYCHOLOGY ATLAS — Premium Interactive Psychology Knowledge Platform, Virtual Laboratory, Adaptive Testing & AI Tutor",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "psychology",
+    "atlas",
+    "knowledge-map",
+    "virtual-laboratory",
+    "uzbek-psychology"
+  ],
+  "license": "MIT"
+}

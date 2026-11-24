@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSYCHOLOGY ATLAS — Psixologiyani yodlamang — uni anglang, bog‘lang va kashf eting</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Merriweather -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Merriweather:ital,wght@0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PSYCHOLOGY ATLAS Design System -->
+    <link rel="stylesheet" href="styles/atlas.css">
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- ===================== TOP HEADER ===================== -->
+    <header class="no-print atlas-glass border-b border-white/10 px-3 sm:px-5 py-2.5 z-40 shadow-lg flex flex-wrap items-center justify-between gap-2.5">
+        <!-- Brand & Mobile Menu -->
+        <div class="flex items-center gap-2.5 min-w-0">
+            <button id="menuBtn" class="lg:hidden w-9 h-9 rounded-xl atlas-surface hover:border-white/30 flex items-center justify-center" title="Menyu va mavzular">
+                <i class="fa-solid fa-bars text-sm"></i>
+            </button>
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-md shrink-0 text-slate-950" style="background:linear-gradient(135deg, #D6B56D 0%, #8B7CFF 100%);">
+                <i class="fa-solid fa-brain text-lg"></i>
+            </div>
+            <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                    <h1 class="font-extrabold text-sm sm:text-base tracking-tight leading-tight truncate">PSYCHOLOGY ATLAS</h1>
+                    <span class="hidden md:inline-block px-2 py-0.5 rounded-full text-[9.5px] font-extrabold uppercase tracking-wider" style="background:rgba(214,181,109,0.16);color:var(--gold-accent)">Academic</span>
+                </div>
+                <p id="headerTopic" class="text-[11px] sm:text-xs truncate" style="color:var(--text-secondary)">1-mavzu · Psixologiya va Psyuxe</p>
+            </div>
+        </div>
+
+        <!-- Global Search (Mavzular, Tugunlar, Lug'at, Olimlar) -->
+        <div id="globalSearchWrap" class="relative flex-1 max-w-xs sm:max-w-md order-3 sm:order-2 w-full sm:w-auto">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-xs opacity-60"></i>
+            <input type="text" id="searchInput" placeholder="Global qidiruv: mavzu, tugun, atama, olim (masalan: diqqat, Pavlov...)"
+                class="w-full pl-9 pr-8 py-2 text-xs sm:text-sm atlas-surface rounded-xl focus:outline-none transition">
+            <button id="clearSearchBtn" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 opacity-60 hover:opacity-100">
+                <i class="fa-solid fa-xmark text-xs"></i>
+            </button>
+            <!-- Global Search Results Dropdown -->
+            <div id="globalSearchDropdown" class="hidden absolute left-0 right-0 top-full mt-1.5 rounded-2xl atlas-card border border-white/15 shadow-2xl z-50"></div>
+        </div>
+
+        <!-- View Switcher, Export, Theme, Notifications & Profile -->
+        <div class="flex items-center gap-1.5 sm:gap-2 order-2 sm:order-3">
+            <!-- Atlas View Switcher: Xarita | Konspekt | Galaxy -->
+            <div id="atlasViewSwitcherWrap" class="atlas-surface p-1 rounded-xl flex items-center">
+                <button id="btnMapView" class="seg-btn is-active" title="Tipologik xarita ko‘rinishi">
+                    <i class="fa-solid fa-diagram-project"></i>
+                    <span class="hidden md:inline">Xarita</span>
+                </button>
+                <button id="btnGridView" class="seg-btn" title="Konspekt va kartochkalar ko‘rinishi">
+                    <i class="fa-solid fa-table-cells-large"></i>
+                    <span class="hidden md:inline">Konspekt</span>
+                </button>
+                <button id="btnGalaxyView" class="seg-btn" title="Knowledge Galaxy — Yagona bilimlar xaritasi">
+                    <i class="fa-solid fa-circle-nodes"></i>
+                    <span class="hidden md:inline">Galaxy</span>
+                </button>
+            </div>
+
+            <!-- PDF / Chop etish -->
+            <button id="btnPrint" class="w-9 h-9 rounded-xl atlas-surface hover:border-white/30 flex items-center justify-center transition" title="Chop etish yoki PDF saqlash">
+                <i class="fa-solid fa-print text-xs"></i>
+            </button>
+
+            <!-- Dark / Light Mode Toggle -->
+            <button id="btnThemeToggle" class="w-9 h-9 rounded-xl atlas-surface hover:border-white/30 flex items-center justify-center transition" title="Dark / Light rejimni almashtirish">
+                <i id="themeModeIcon" class="fa-solid fa-sun text-sm text-amber-400"></i>
+            </button>
+
+            <!-- Bildirishnomalar -->
+            <div id="notifWrap" class="relative">
+                <button id="btnNotifications" class="w-9 h-9 rounded-xl atlas-surface hover:border-white/30 flex items-center justify-center transition relative" title="Bildirishnomalar va faoliyat">
+                    <i class="fa-regular fa-bell text-xs"></i>
+                    <span id="notifCountBadge" class="hidden absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-amber-400 text-slate-950 font-black text-[9px] flex items-center justify-center">0</span>
+                </button>
+                <div id="notifPopover" class="hidden absolute right-0 top-full mt-2 w-80 rounded-2xl atlas-card border border-white/15 shadow-2xl z-50"></div>
+            </div>
+
+            <!-- Profil va XP -->
+            <button id="btnProfile" class="px-2.5 h-9 rounded-xl atlas-surface hover:border-amber-400/50 flex items-center gap-2 transition" title="Tadqiqotchi profili va yutuqlar">
+                <i class="fa-solid fa-user-graduate text-xs" style="color:var(--gold-accent)"></i>
+                <span id="headerXpBadge" class="hidden sm:inline text-[11px] font-extrabold" style="color:var(--gold-accent)">0 XP · 1-daraja</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN WORKSPACE LAYOUT ===================== -->
+    <div class="flex-1 flex min-h-0 relative">
+
+        <!-- LEFT SIDEBAR (MODULLAR + 13 TA MAVZU) -->
+        <aside id="sidebar" class="no-print absolute lg:relative z-40 h-full w-72 shrink-0 atlas-bg-sec border-r border-white/10 flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-200">
+            <!-- Platforma Modullari Navigatsiyasi -->
+            <div class="p-3 border-b border-white/10 space-y-1">
+                <p class="text-[10px] font-extrabold uppercase tracking-widest px-2 pb-1" style="color:var(--gold-accent)">Platforma modullari</p>
+                <button data-module-nav="dashboard" class="module-nav-btn">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-chart-pie w-4 text-center text-amber-400"></i><span>Bosh sahifa (Dashboard)</span></span>
+                </button>
+                <button data-module-nav="atlas" class="module-nav-btn is-active">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-diagram-project w-4 text-center text-sky-400"></i><span>Interaktiv Atlas</span></span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-white/10">13</span>
+                </button>
+                <button data-module-nav="library" class="module-nav-btn">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-layer-group w-4 text-center text-indigo-400"></i><span>Mavzular kutubxonasi</span></span>
+                </button>
+                <button data-module-nav="laboratory" class="module-nav-btn">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-flask-vial w-4 text-center text-emerald-400"></i><span>Psixologiya laboratoriyasi</span></span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">7</span>
+                </button>
+                <button data-module-nav="tests" class="module-nav-btn">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-clipboard-check w-4 text-center text-amber-400"></i><span>Test tizimi</span></span>
+                </button>
+                <button data-module-nav="flashcards" class="module-nav-btn">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-clone w-4 text-center text-purple-400"></i><span>Smart Flashcards</span></span>
+                </button>
+                <button data-module-nav="ai-tutor" class="module-nav-btn">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-robot w-4 text-center text-rose-400"></i><span>AI Psixologiya Ustoz</span></span>
+                </button>
+                <button data-module-nav="history" class="module-nav-btn">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-landmark w-4 text-center text-amber-300"></i><span>Psixologiya tarixi</span></span>
+                </button>
+                <button data-module-nav="glossary" class="module-nav-btn">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-spell-check w-4 text-center text-sky-300"></i><span>Atamalar lug‘ati</span></span>
+                </button>
+                <button data-module-nav="notes" class="module-nav-btn">
+                    <span class="flex items-center gap-2.5"><i class="fa-solid fa-book-journal-whills w-4 text-center text-pink-400"></i><span>Shaxsiy daftar</span></span>
+                </button>
+            </div>
+
+            <!-- 13 Mavzu va 2 Bo'lim Ro'yxati (ASL TUZILMA SAQLANGAN) -->
+            <div class="px-4 py-2.5 border-b border-white/10 flex items-center justify-between">
+                <p class="text-[10px] font-extrabold uppercase tracking-widest" style="color:var(--text-secondary)">Atlas mavzulari</p>
+                <p class="text-[10.5px]" style="color:var(--gold-accent)">13 mavzu · 2 bo‘lim</p>
+            </div>
+            <nav id="topicNav" class="flex-1 overflow-y-auto p-2.5 space-y-3.5"></nav>
+            <div class="p-3 border-t border-white/10 text-[10.5px] leading-relaxed" style="color:var(--text-secondary)">
+                «Psixologiyani yodlamang — uni anglang, bog‘lang va kashf eting.»
+            </div>
+        </aside>
+        <div id="sidebarBackdrop" class="hidden lg:hidden fixed inset-0 bg-black/60 z-30"></div>
+
+        <!-- ===================== 1. DASHBOARD VIEWPORT ===================== -->
+        <section id="dashboardViewport" class="hidden flex-1 min-w-0 overflow-y-auto atlas-bg-main"></section>
+
+        <!-- ===================== 2. INTERAKTIV ATLAS VIEWPORT (MAP + KONSPEKT + GALAXY) ===================== -->
+        <div id="atlasViewport" class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+            <!-- 2A. XARITA KO‘RINISHI (MAP VIEW) -->
+            <main id="mapViewport" class="relative flex-1 min-w-0 overflow-hidden canvas-bg cursor-grab">
+                <!-- Yuqori chap yo'riqnoma va mavzu navigatsiyasi -->
+                <div class="no-print absolute top-3 left-3 z-30 atlas-glass rounded-xl px-3 py-2 shadow-lg text-[11px] flex flex-wrap items-center gap-2.5 max-w-[92vw]">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Surish: sichqoncha bilan torting · <b>Blokni bosing</b> — batafsil ma’lumot</span>
+                    <div class="h-3.5 w-px bg-white/15 hidden sm:block"></div>
+                    <div class="flex items-center gap-1">
+                        <button id="prevTopicBtn" class="px-2 py-0.5 rounded-lg atlas-surface hover:border-amber-400 text-[10.5px] font-bold" title="Oldingi mavzu">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <button id="nextTopicBtn" class="px-2 py-0.5 rounded-lg atlas-surface hover:border-amber-400 text-[10.5px] font-bold" title="Keyingi mavzu">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Yuqori o'ng Eksport va Shoxlarni Yoyish/Yig'ish -->
+                <div class="no-print absolute top-3 right-3 z-30 flex items-center gap-1.5 atlas-glass p-1.5 rounded-xl shadow-lg">
+                    <button id="toggleBranchesBtn" class="px-2.5 py-1.5 rounded-lg atlas-surface hover:border-amber-400 text-[11px] font-bold flex items-center gap-1.5 transition" title="Barcha shoxlarni ochish yoki yig‘ish">
+                        <i class="fa-solid fa-sitemap text-amber-400"></i>
+                        <span class="hidden sm:inline">Shoxlar</span>
+                    </button>
+                    <button id="btnExportPNG" class="px-2.5 py-1.5 rounded-lg atlas-surface hover:border-sky-400 text-[11px] font-bold flex items-center gap-1 transition" title="Xaritani PNG rasm sifatida yuklab olish">
+                        <i class="fa-regular fa-image text-sky-400"></i>
+                        <span>PNG</span>
+                    </button>
+                    <button id="btnExportSVG" class="px-2.5 py-1.5 rounded-lg atlas-surface hover:border-purple-400 text-[11px] font-bold flex items-center gap-1 transition" title="Xaritani SVG vektor sifatida yuklab olish">
+                        <i class="fa-solid fa-bezier-curve text-purple-400"></i>
+                        <span>SVG</span>
+                    </button>
+                </div>
+
+                <!-- Pastki chap Zoom & Fit -->
+                <div class="no-print absolute bottom-4 left-4 z-30 flex items-center gap-1.5 atlas-glass p-1.5 rounded-2xl shadow-xl">
+                    <button id="zoomInBtn" class="w-9 h-9 rounded-xl hover:bg-white/10 flex items-center justify-center transition" title="Yaqinlashtirish">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                    </button>
+                    <span id="zoomLevelText" class="text-[11px] font-bold px-1 min-w-[44px] text-center">100%</span>
+                    <button id="zoomOutBtn" class="w-9 h-9 rounded-xl hover:bg-white/10 flex items-center justify-center transition" title="Uzoqlashtirish">
+                        <i class="fa-solid fa-minus text-xs"></i>
+                    </button>
+                    <div class="w-px h-5 bg-white/15 mx-1"></div>
+                    <button id="fitBtn" class="px-3 h-9 rounded-xl text-slate-950 text-[11px] font-extrabold flex items-center gap-1.5 transition" style="background:var(--gold-accent)" title="Butun xaritani ekranga moslash">
+                        <i class="fa-solid fa-compress"></i>
+                        <span>Markaz</span>
+                    </button>
+                </div>
+
+                <!-- Pastki o'ng Legend -->
+                <div id="legend" class="no-print hidden xl:flex absolute bottom-4 right-4 z-30 atlas-glass px-4 py-2.5 rounded-2xl shadow-xl items-center gap-4 text-[11px] flex-wrap max-w-[48vw]"></div>
+
+                <!-- Xarita Dunyosi (SVG va Tugunlar) -->
+                <div id="mapWorld" class="absolute origin-top-left" style="width:1400px;height:900px;">
+                    <svg id="connectorsSvg" class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1400 900"></svg>
+                    <div id="nodesContainer" class="relative w-full h-full"></div>
+                </div>
+            </main>
+
+            <!-- 2B. KONSPEKT KO‘RINISHI (STUDY VIEW) -->
+            <section id="gridViewport" class="hidden flex-1 min-w-0 overflow-y-auto atlas-bg-main p-4 sm:p-8">
+                <div class="max-w-6xl mx-auto">
+                    <div id="gridHero" class="rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-7"></div>
+                    <div id="gridCards" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+                </div>
+            </section>
+
+            <!-- 2C. KNOWLEDGE GALAXY KO‘RINISHI -->
+            <section id="galaxyViewport" class="hidden flex-1 min-w-0 overflow-hidden atlas-bg-main"></section>
+        </div>
+
+        <!-- ===================== 3. MAVZULAR KUTUBXONASI VIEWPORT ===================== -->
+        <section id="libraryViewport" class="hidden flex-1 min-w-0 overflow-y-auto atlas-bg-main"></section>
+
+        <!-- ===================== 4. PSIXOLOGIYA LABORATORIYASI VIEWPORT ===================== -->
+        <section id="labViewport" class="hidden flex-1 min-w-0 overflow-y-auto atlas-bg-main"></section>
+
+        <!-- ===================== 5. TEST TIZIMI VIEWPORT ===================== -->
+        <section id="testsViewport" class="hidden flex-1 min-w-0 overflow-y-auto atlas-bg-main"></section>
+
+        <!-- ===================== 6. SMART FLASHCARDS VIEWPORT ===================== -->
+        <section id="flashcardsViewport" class="hidden flex-1 min-w-0 overflow-y-auto atlas-bg-main"></section>
+
+        <!-- ===================== 7. AI PSIXOLOGIYA USTOZ VIEWPORT ===================== -->
+        <section id="aiViewport" class="hidden flex-1 min-w-0 overflow-y-auto atlas-bg-main"></section>
+
+        <!-- ===================== 8. PSIXOLOGIYA TARIXI VIEWPORT ===================== -->
+        <section id="historyViewport" class="hidden flex-1 min-w-0 overflow-y-auto atlas-bg-main"></section>
+
+        <!-- ===================== 9. ATAMALAR LUG‘ATI VIEWPORT ===================== -->
+        <section id="glossaryViewport" class="hidden flex-1 min-w-0 overflow-y-auto atlas-bg-main"></section>
+
+        <!-- ===================== 10. SHAXSIY DAFTAR VIEWPORT ===================== -->
+        <section id="notesViewport" class="hidden flex-1 min-w-0 overflow-y-auto atlas-bg-main"></section>
+    </div>
+
+    <!-- ===================== DETAIL DRAWER (BATAFSIL MA'LUMOT OYNASI) ===================== -->
+    <div id="drawer" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-close-drawer></div>
+        <div id="drawerPanel" class="absolute right-0 top-0 bottom-0 w-full max-w-lg atlas-bg-sec shadow-2xl border-l border-white/15 flex flex-col">
+            <div id="drawerHeader" class="p-6 text-white">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="min-w-0">
+                        <span id="drawerBadge" class="inline-block px-2.5 py-0.5 rounded-full bg-white/20 text-[11px] font-semibold mb-2"></span>
+                        <h3 id="drawerTitle" class="serif text-xl sm:text-2xl font-bold leading-snug"></h3>
+                        <p id="drawerSub" class="text-white/85 text-xs sm:text-sm mt-1.5"></p>
+                    </div>
+                    <button data-close-drawer class="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 flex items-center justify-center text-white shrink-0">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6 overflow-y-auto flex-1 space-y-5">
+                <!-- Tezkor amallar: Daftarga saqlash va AI Ustoz -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <button id="btnSaveNodeToNotes" class="px-3.5 py-2 rounded-xl text-xs font-bold atlas-surface hover:border-amber-400 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-book-journal-whills text-amber-400"></i>
+                        <span>Shaxsiy daftarga saqlash</span>
+                    </button>
+                    <button id="btnAskAiAboutNode" class="px-3.5 py-2 rounded-xl text-xs font-bold atlas-surface hover:border-rose-400 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-robot text-rose-400"></i>
+                        <span>AI Ustozdan chuqurroq so‘rash</span>
+                    </button>
+                </div>
+
+                <div>
+                    <h4 class="text-[10px] font-bold uppercase tracking-wider mb-2" style="color:var(--gold-accent)">Ilmiy-psixologik ta’rif</h4>
+                    <p id="drawerDesc" class="text-sm leading-relaxed"></p>
+                </div>
+
+                <div id="drawerItemsWrap">
+                    <h4 class="text-[10px] font-bold uppercase tracking-wider mb-2.5" style="color:var(--text-secondary)">Tarkibiy qismlari va turlari</h4>
+                    <div id="drawerItems" class="space-y-2"></div>
+                </div>
+
+                <div id="drawerExampleWrap" class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4">
+                    <div class="flex items-center gap-2 text-amber-300 font-bold text-xs mb-1.5">
+                        <i class="fa-solid fa-lightbulb text-amber-400"></i>
+                        <span>Hayotiy misol</span>
+                    </div>
+                    <p id="drawerExample" class="text-sm leading-relaxed"></p>
+                </div>
+
+                <div id="drawerExtraWrap" class="bg-indigo-500/10 border border-indigo-500/30 rounded-2xl p-4 hidden">
+                    <div class="flex items-center gap-2 text-indigo-300 font-bold text-xs mb-1.5">
+                        <i class="fa-solid fa-circle-info text-indigo-400"></i>
+                        <span>Qo‘shimcha izoh</span>
+                    </div>
+                    <p id="drawerExtra" class="text-sm leading-relaxed"></p>
+                </div>
+
+                <!-- Ilmiy Audit Izohi (5-Qat'iy qoida asosida) -->
+                <div id="drawerAuditWrap" class="bg-purple-500/10 border border-purple-500/30 rounded-2xl p-4 hidden">
+                    <div class="flex items-center gap-2 text-purple-300 font-bold text-xs mb-1.5">
+                        <i class="fa-solid fa-magnifying-glass-chart text-purple-400"></i>
+                        <span>Ilmiy audit va metodologik eslatma</span>
+                    </div>
+                    <div id="drawerAuditText" class="text-xs leading-relaxed" style="color:var(--text-secondary)"></div>
+                </div>
+
+                <!-- Tasdiqlangan Ilmiy Manbalar -->
+                <div id="drawerRefsWrap" class="p-3.5 rounded-2xl atlas-surface text-xs space-y-1">
+                    <div class="font-bold uppercase text-[10px] tracking-wider mb-1" style="color:var(--gold-accent)">
+                        <i class="fa-solid fa-book-bookmark mr-1"></i>Tasdiqlangan ilmiy manbalar
+                    </div>
+                    <div id="drawerRefs" class="space-y-1 text-[11px]" style="color:var(--text-secondary)"></div>
+                </div>
+            </div>
+
+            <div id="drawerRelatedWrap" class="p-4 border-t border-white/10 atlas-surface">
+                <p class="text-[10px] font-bold uppercase tracking-wider mb-2" style="color:var(--text-secondary)">Bog‘liq mavzular</p>
+                <div id="drawerRelated" class="flex flex-wrap gap-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== PROFIL VA YUTUQLAR MODALI ===================== -->
+    <div id="profileModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/65 backdrop-blur-sm" id="closeProfileModal"></div>
+        <div class="relative w-full max-w-lg atlas-card p-6 border border-white/15 z-10 space-y-4">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <h3 class="serif text-lg font-bold">Tadqiqotchi Profili va Yutuqlar</h3>
+                <button onclick="document.getElementById('profileModal').classList.add('hidden')" class="w-8 h-8 rounded-lg atlas-surface flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+            <div id="profileModalBody"></div>
+        </div>
+    </div>
+
+    <!-- ===================== TOAST BILDIRISHNOMALAR KONTEYNERI ===================== -->
+    <div id="toastContainer" class="no-print fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm"></div>
+
+    <!-- ===================== MODULLI JAVASCRIPT ARXITEKTURASI ===================== -->
+    <script src="utils/helpers.js"></script>
+    <script src="data/topics-data.js"></script>
+    <script src="data/education-data.js"></script>
+    <script src="services/storage.js"></script>
+    <script src="services/api.js"></script>
+    <script src="modules/atlas/atlas.js"></script>
+    <script src="modules/dashboard/dashboard.js"></script>
+    <script src="modules/laboratory/laboratory.js"></script>
+    <script src="modules/tests/tests.js"></script>
+    <script src="modules/flashcards/flashcards.js"></script>
+    <script src="modules/ai-tutor/ai-tutor.js"></script>
+    <script src="modules/history/history.js"></script>
+    <script src="modules/glossary/glossary.js"></script>
+    <script src="modules/notes/notes.js"></script>
+    <script src="app/app.js"></script>
+</body>
+</html>
